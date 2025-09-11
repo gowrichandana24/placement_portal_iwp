@@ -1,191 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Placement Portal - Admin Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIML & Data Science Placement Portal - Student Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> <style>
+        /* Specific styles for the login page */
+        body {
+            /* Using a subtle background that blends with the main portal's theme */
+            background: linear-gradient(135deg, #eef4f9 0%, #d8e2ed 100%);
+        }
 
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: url('clg.webp') no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-      height: 100vh;
-    }
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 180px); /* Adjust height for header and footer */
+            padding: 40px 20px;
+        }
 
-    /* White overlay */
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(255, 255, 255, 0.562);
-      z-index: -1;
-    }
+        .login-box {
+            background: #ffffff;
+            padding: 40px 50px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            max-width: 450px;
+            width: 100%;
+        }
 
-    .header {
-      background-color: #0d1b3d;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      color: white;
-    }
+        .login-box h2 {
+            font-size: 28px;
+            color: #003366;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
 
-    .header .logo {
-      display: flex;
-      align-items: center;
-    }
+        .login-box input {
+            display: block;
+            margin: 15px auto;
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: border-color 0.3s ease;
+        }
 
-    .header img {
-      height: 60px;
-      margin-right: 15px;
-    }
+        .login-box input:focus {
+            outline: none;
+            border-color: #004aad;
+            box-shadow: 0 0 5px rgba(0, 68, 173, 0.2);
+        }
 
-    .header .title {
-      font-size: 26px;
-      font-weight: 600;
-    }
+        .login-box .btn {
+            padding: 12px 30px;
+            margin-top: 25px;
+            font-size: 16px;
+            background-color: #004aad;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-weight: 600;
+        }
 
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-weight: 500;
-    }
+        .login-box .btn:hover {
+            background-color: #003399;
+            transform: translateY(-2px);
+        }
 
-    .nav-links a:hover {
-      text-decoration: underline;
-    }
+        .help-link {
+            display: block;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #004aad;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
 
+        .help-link:hover {
+            color: #003366;
+            text-decoration: underline;
+        }
 
-    .container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: calc(100vh - 80px);
-    }
-
-    .login-box {
-      background: rgba(255, 255, 255, 0.95);
-      padding: 40px 50px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-
-    .login-box h2 {
-      margin-bottom: 25px;
-      font-size: 22px;
-      color: #0d1b3d;
-    }
-
-    .login-box input {
-      display: block;
-      margin: 12px auto;
-      padding: 10px;
-      width: 250px;
-      font-size: 15px;
-      border-radius: 4px;
-      border: 1px solid #bbb;
-    }
-
-    .login-box .btn {
-      padding: 12px 30px;
-      margin-top: 20px;
-      font-size: 15px;
-      background-color: #0d1b3d;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .login-box .btn:hover {
-      background-color: #233e70;
-    }
-
-    .help-btn {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      background-color: #0d1b3d;
-      color: white;
-      padding: 10px 25px;
-      border-radius: 50px;
-      font-size: 14px;
-      text-decoration: none;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .help-btn:hover {
-      background-color: #2c4a80;
-    }
-
-    @media (max-width: 600px) {
-      .login-box input {
-        width: 90%;
-      }
-      .header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .nav-links {
-        margin-top: 10px;
-      }
-    }
-  </style>
+        /* Mobile adjustments */
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="header">
-    <div class="logo">
-      <img src="logo.jpeg" alt="Christ Logo">
-      <div class="title">PLACEMENT PORTAL</div>
-    </div>
-    <div class="nav-links">
-      <a href="index.html">HOME</a>
-      <a href="index.html#about">ABOUT</a>
-      <a href="index.html#contact">CONTACT</a>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="dep_logo.jpg" alt="Christ University Department Logo" />
+                <strong>AIML & DATA SCIENCE PLACEMENT PORTAL</strong>
+            </a>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="index.html#about">ABOUT</a>
+            <a href="index.html#contact">CONTACT</a>
+            <a href="select.html" class="login-btn">LOGIN</a>
+        </nav>
+    </header>
 
-    </div>
-  </div>
+    <section class="login-container">
+        <div class="login-box">
+            <h2>Student Login</h2>
+            <input type="text" placeholder="Student ID" required>
+            <input type="password" placeholder="Password" required>
+            <button class="btn" onclick="validateLogin()">LOGIN</button>
+            <a href="help.html" class="help-link">Need help logging in?</a>
+        </div>
+    </section>
 
-  <!-- Login Form -->
-  <div class="container">
-    <div class="login-box">
-      <h2>Student Login</h2>
-      <input type="text" placeholder="Student ID">
-      <input type="password" placeholder="Password">
-      <button class="btn" onclick="validateLogin()">LOGIN</button>
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-col">
+                <h4>QUICK LINKS</h4>
+                <a href="index.html">HOME</a>
+                <a href="index.html#about">ABOUT</a>
+                <a href="index.html#contact">CONTACT</a>
+            </div>
+            <div class="footer-col">
+                <h4>CONTACT US</h4>
+                <p>placement@christuni.edu</p>
+                <p>+91 80 4012 9600</p>
+                <p>Kengeri, Bengaluru</p>
+            </div>
+            <div class="footer-col">
+                <h4>FOLLOW US</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 CHRIST University - Placement Cell. All rights reserved.
+        </div>
+    </footer>
 
+    <script>
+        function validateLogin() {
+            const studentId = document.querySelector('input[placeholder="Student ID"]').value.trim();
+            const password = document.querySelector('input[placeholder="Password"]').value.trim();
 
-    </div>
-  </div>
-<script>
-  function validateLogin() {
-    const studentId = document.querySelector('input[placeholder="Student ID"]').value.trim();
-    const password = document.querySelector('input[placeholder="Password"]').value.trim();
+            if (!studentId || !password) {
+                alert("Please fill in both Student ID and Password.");
+                return;
+            }
 
-    if (!studentId || !password) {
-      alert("Please fill in both Student ID and Password.");
-      return;
-    }
-
-    // Proceed to dashboard (you can replace this with actual backend login check)
-    window.location.href = 'student_dashboard.html';
-  }
-</script>
-
-  <!-- Help Button -->
-  <a href="help.html" class="help-btn">Help</a>
-
+            // In a real application, you would send this data to a server for validation.
+            // For now, we'll simulate a successful login.
+            alert("Login successful! Redirecting to student dashboard.");
+            window.location.href = 'student_dashboard.html';
+        }
+    </script>
 </body>
 </html>

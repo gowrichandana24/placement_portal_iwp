@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>AIML & Data Science - Registration Successful</title>
+    <title>AIML & Data Science - Create Support Ticket</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
@@ -84,18 +84,18 @@
             background-color: #cc3c3c;
         }
 
-        /* Success Section */
-        .success-container {
+        /* Main Content */
+        .container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             min-height: calc(100vh - 180px);
             padding: 40px 20px;
             text-align: center;
         }
 
-        .card {
+        .form-card {
             background: #ffffff;
             padding: 50px;
             border-radius: 12px;
@@ -104,47 +104,55 @@
             width: 100%;
         }
 
-        .tick-icon {
-            /* Increased size */
-            font-size: 80px; 
-            color: #4CAF50;
-            margin-bottom: 20px;
-            animation: pop 0.6s ease-in-out;
-        }
-
-        @keyframes pop {
-            0% { transform: scale(0.3); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        h2 {
-            font-size: 32px;
+        .form-card h2 {
+            font-size: 28px;
             color: #003366;
-            margin: 0 0 15px;
+            margin-bottom: 25px;
             font-weight: 700;
         }
-
-        p {
+        
+        .form-card input,
+        .form-card textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
             font-size: 16px;
-            color: #555;
-            margin-bottom: 30px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: border-color 0.3s ease;
+            font-family: 'Inter', sans-serif;
         }
 
-        .home-button {
+        .form-card input:focus,
+        .form-card textarea:focus {
+            outline: none;
+            border-color: #004aad;
+            box-shadow: 0 0 5px rgba(0, 68, 173, 0.2);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 14px;
             background-color: #004aad;
             color: white;
-            padding: 14px 40px;
-            text-decoration: none;
+            border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
+            cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s ease;
-            display: inline-block;
         }
 
-        .home-button:hover {
+        .submit-button:hover {
             background-color: #003399;
             transform: translateY(-2px);
+        }
+
+        .success-msg {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 15px;
+            font-size: 16px;
         }
         
         /* Standardized Footer */
@@ -219,20 +227,9 @@
             font-size: 12px;
             color: #aaa;
         }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .card {
-                padding: 40px;
-            }
-            h2 {
-                font-size: 28px;
-            }
-        }
     </style>
 </head>
 <body>
-
     <header>
         <div class="header-left">
             <a href="index.html" class="logo">
@@ -248,15 +245,19 @@
         </nav>
     </header>
 
-    <div class="success-container">
-        <div class="card">
-            <i class="fa-solid fa-circle-check tick-icon"></i>
-            <h2>Registration Successful!</h2>
-            <p>You have successfully completed your registration for placements.<br>Best wishes for your upcoming opportunities.</p>
-            <a href="index.html" class="home-button">Go Back to Home</a>
+    <div class="container">
+        <div class="form-card">
+            <h2>Student Help Desk</h2>
+            <form id="helpForm">
+                <input type="text" name="regno" placeholder="Register Number" required />
+                <input type="text" name="class" placeholder="Class (e.g., B.Tech AIML A)" required />
+                <textarea name="problem" placeholder="Describe your issue or concern" rows="5" required></textarea>
+                <button type="submit" class="submit-button">Submit Problem</button>
+            </form>
+            <div class="success-msg" id="successMsg"></div>
         </div>
     </div>
-
+    
     <footer>
         <div class="footer-wrapper">
             <div class="footer-col">
@@ -285,5 +286,18 @@
         </div>
     </footer>
 
+    <script>
+        document.getElementById("helpForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const successMsg = document.getElementById("successMsg");
+            
+            // In a real application, you would send this to a backend via fetch API.
+            // For now, we'll simulate the success message.
+            setTimeout(() => {
+                successMsg.textContent = "Your concern has been submitted successfully!";
+                this.reset();
+            }, 500); // Simulate a network delay
+        });
+    </script>
 </body>
 </html>

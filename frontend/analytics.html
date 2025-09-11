@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>AIML & Data Science - Admin Dashboard</title>
+    <title>AIML & Data Science - Analytics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         /* Global Styles & Reset */
@@ -174,48 +175,7 @@
             margin-right: 10px;
         }
         
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-icon {
-            font-size: 40px;
-            color: #003366;
-            margin-bottom: 10px;
-        }
-
-        .stat-card h3 {
-            margin: 0 0 5px;
-            font-size: 16px;
-            color: #777;
-            font-weight: 500;
-        }
-
-        .stat-card p {
-            font-size: 32px;
-            font-weight: 700;
-            margin: 0;
-            color: #003366;
-        }
-        
-        /* Dashboard Sections */
+        /* Analytics Section */
         .dashboard-section {
             background-color: white;
             padding: 20px;
@@ -233,81 +193,17 @@
             font-weight: 600;
             color: #003366;
         }
-        
-        /* Communication Hub */
-        .communication-hub-grid {
+
+        .analytics-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
         }
         
-        .form-card {
+        .chart-container {
+            padding: 20px;
             background-color: #f9f9f9;
-            padding: 25px;
             border-radius: 8px;
-            border: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-card h4 {
-            margin: 0 0 20px 0;
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-
-        .form-content {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .input-group label {
-            font-size: 14px;
-            font-weight: 500;
-            color: #555;
-            margin-bottom: 5px;
-        }
-
-        .input-group input,
-        .input-group textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .input-group input:focus,
-        .input-group textarea:focus {
-            outline: none;
-            border-color: #004aad;
-            box-shadow: 0 0 5px rgba(0, 68, 173, 0.2);
-        }
-
-        .submit-button {
-            background-color: #004aad;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
-
-        .submit-button:hover {
-            background-color: #003399;
         }
         
         /* Standardized Footer */
@@ -409,117 +305,37 @@
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li class="nav-item active"><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li class="nav-item"><a href="manage-students.html"><i class="fas fa-users"></i> Manage Students</a></li>
                     <li class="nav-item"><a href="manage-companies.html"><i class="fas fa-building"></i> Manage Companies</a></li>
                     <li class="nav-item"><a href="manage-jobs.html"><i class="fas fa-briefcase"></i> Manage Jobs</a></li>
-                    <li class="nav-item"><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
-                    <li class="nav-item"><a href="help-desk.html"><i class="fas fa-headset"></i> Help Desk</a></li>
+                    <li class="nav-item active"><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
                 </ul>
             </nav>
         </aside>
 
         <main class="main-content">
             <div class="content-header">
-                <h2>Admin Dashboard</h2>
+                <h2>Analytics</h2>
             </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-users stat-icon"></i>
-                    <h3>Total Students</h3>
-                    <p id="totalStudents">150</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-building stat-icon"></i>
-                    <h3>Registered Companies</h3>
-                    <p id="totalCompanies">45</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-briefcase stat-icon"></i>
-                    <h3>Open Job Listings</h3>
-                    <p id="totalJobs">68</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-check-circle stat-icon"></i>
-                    <h3>Placed Students</h3>
-                    <p id="placedStudents">85</p>
+            
+            <div class="dashboard-section">
+                <h3>Placement Overview</h3>
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <canvas id="placementRateChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="companyCountChart"></canvas>
+                    </div>
                 </div>
             </div>
 
             <div class="dashboard-section">
-                <h3>Communication Hub</h3>
-                <div class="communication-hub-grid">
-                    <div class="form-card">
-                        <h4>Post Notifications</h4>
-                        <form id="notificationForm" class="form-content">
-                            <div class="input-group">
-                                <label for="notificationTitle">Title</label>
-                                <input type="text" id="notificationTitle" placeholder="e.g., Resume deadline" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="notificationContent">Content</label>
-                                <textarea id="notificationContent" placeholder="Brief, urgent message..." rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="submit-button">Post Notification</button>
-                        </form>
-                    </div>
-
-                    <div class="form-card">
-                        <h4>Post Announcements</h4>
-                        <form id="announcementForm" class="form-content">
-                            <div class="input-group">
-                                <label for="announcementTitle">Title</label>
-                                <input type="text" id="announcementTitle" placeholder="e.g., Circular for Placements" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="announcementContent">Content</label>
-                                <textarea id="announcementContent" placeholder="Formal, detailed announcement..." rows="5" required></textarea>
-                            </div>
-                            <button type="submit" class="submit-button">Post Announcement</button>
-                        </form>
-                    </div>
-
-                    <div class="form-card">
-                        <h4>Post Upcoming Drives</h4>
-                        <form id="driveForm" class="form-content">
-                            <div class="input-group">
-                                <label for="driveCompany">Company Name</label>
-                                <input type="text" id="driveCompany" placeholder="e.g., Infosys" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="driveTitle">Job Title</label>
-                                <input type="text" id="driveTitle" placeholder="e.g., System Engineer" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="driveDate">Drive Date</label>
-                                <input type="date" id="driveDate" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="registerDate">Last Day to Register</label>
-                                <input type="date" id="registerDate" required>
-                            </div>
-                            <button type="submit" class="submit-button">Post Drive</button>
-                        </form>
-                    </div>
-
-                    <div class="form-card">
-                        <h4>Mark Calendar Events</h4>
-                        <form id="calendarForm" class="form-content">
-                            <div class="input-group">
-                                <label for="eventTitle">Event Title</label>
-                                <input type="text" id="eventTitle" placeholder="e.g., Mock Interview Day" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="eventDate">Date</label>
-                                <input type="date" id="eventDate" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="eventTime">Time (Optional)</label>
-                                <input type="time" id="eventTime">
-                            </div>
-                            <button type="submit" class="submit-button">Add Event</button>
-                        </form>
+                <h3>Department Metrics</h3>
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <canvas id="ctcChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -553,5 +369,68 @@
             © 2025 CHRIST University - Placement Cell. All rights reserved.
         </div>
     </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample Data (replace with data fetched from your backend)
+            const placementData = {
+                labels: ['Placed', 'Unplaced'],
+                datasets: [{
+                    label: 'Students',
+                    data: [85, 65], // Replace with dynamic data
+                    backgroundColor: ['#4CAF50', '#F44336'],
+                }]
+            };
+
+            const companyData = {
+                labels: ['Active', 'Upcoming', 'Inactive'],
+                datasets: [{
+                    label: 'Companies',
+                    data: [35, 10, 5], // Replace with dynamic data
+                    backgroundColor: ['#003366', '#FFC107', '#9E9E9E'],
+                }]
+            };
+
+            const ctcData = {
+                labels: ['2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Average CTC (LPA)',
+                    data: [5.5, 6.0, 6.5], // Replace with dynamic data
+                    backgroundColor: '#004aad',
+                    borderColor: '#003366',
+                    borderWidth: 1
+                }]
+            };
+
+            // Chart Configuration
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Sample Chart Title' }
+                }
+            };
+            
+            // Render Charts
+            new Chart(document.getElementById('placementRateChart'), {
+                type: 'doughnut',
+                data: placementData,
+                options: { ...chartOptions, plugins: { ...chartOptions.plugins, title: { text: 'Placement Rate' } } }
+            });
+
+            new Chart(document.getElementById('companyCountChart'), {
+                type: 'pie',
+                data: companyData,
+                options: { ...chartOptions, plugins: { ...chartOptions.plugins, title: { text: 'Company Status' } } }
+            });
+
+            new Chart(document.getElementById('ctcChart'), {
+                type: 'bar',
+                data: ctcData,
+                options: { ...chartOptions, plugins: { ...chartOptions.plugins, title: { text: 'Average CTC Over Years' } } }
+            });
+        });
+    </script>
 </body>
 </html>
