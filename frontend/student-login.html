@@ -151,20 +151,34 @@
     </footer>
 
     <script>
-        function validateLogin() {
-            const studentId = document.querySelector('input[placeholder="Student ID"]').value.trim();
-            const password = document.querySelector('input[placeholder="Password"]').value.trim();
-
-            if (!studentId || !password) {
-                alert("Please fill in both Student ID and Password.");
-                return;
-            }
-
-            // In a real application, you would send this data to a server for validation.
-            // For now, we'll simulate a successful login.
-            alert("Login successful! Redirecting to student dashboard.");
+function validateLogin() {
+    const studentId = document.querySelector('input[placeholder="Student ID"]').value.trim();
+    const password = document.querySelector('input[placeholder="Password"]').value.trim();
+    if (!studentId || !password) {
+        alert("Please fill in both Student ID and Password.");
+        return;
+    }
+    fetch('http://localhost:5500/student/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ studentId, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.message === 'Login successful') {
+            // Save student info in localStorage
+            localStorage.setItem('student', JSON.stringify(data.student));
             window.location.href = 'student_dashboard.html';
+        } else {
+            alert('Invalid Student ID or Password');
         }
-    </script>
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Server error. Try again later.');
+    });
+}
+</script>
+
 </body>
 </html>

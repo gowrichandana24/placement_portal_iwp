@@ -499,7 +499,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     overall_cgpa: document.getElementById("overallcgpa").value
   };
 
-  const response = await fetch("http://localhost:4000/interested", {
+  const response = await fetch("http://localhost:5500/interested", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)

@@ -503,6 +503,26 @@
             © 2025 CHRIST University - Placement Cell. All rights reserved.
         </div>
     </footer>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const student = JSON.parse(localStorage.getItem('student'));
+    if (!student) {
+        alert('Please login first.');
+        window.location.href = 'student-login.html';
+        return;
+    }
+
+    // Update dashboard name
+    const nameElement = document.querySelector('.sidebar h2');
+    if (nameElement) nameElement.textContent = student.student_name;
+
+    const courseElement = document.querySelector('.sidebar p:nth-of-type(1)');
+    if (courseElement) courseElement.textContent = student.course;
+
+    const batchElement = document.querySelector('.sidebar p:nth-of-type(2)');
+    if (batchElement) batchElement.textContent = 'Batch: ' + student.batch;
+});
+</script>
 
 </body>
 </html>
