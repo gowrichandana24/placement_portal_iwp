@@ -486,5 +486,34 @@
 
         semSelect.dispatchEvent(new Event('change'));
     </script>
+    <script>
+document.querySelector("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const data = {
+    name: document.getElementById("name").value,
+    regno: document.getElementById("regno").value,
+    email: document.getElementById("email").value,
+    contact: document.getElementById("contact").value,
+    course: document.getElementById("course").value,
+    sem: document.getElementById("sem").value,
+    overall_cgpa: document.getElementById("overallcgpa").value
+  };
+
+  const response = await fetch("http://localhost:4000/interested", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  if (response.ok) {
+    // ✅ Redirect instead of alert
+    window.location.href = "success.html";
+  } else {
+    alert("❌ Something went wrong. Please try again.");
+  }
+});
+</script>
+
+
 </body>
 </html>

@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* All CSS is now inside this style block for a self-contained file */
         * {
             margin: 0;
             padding: 0;
@@ -22,7 +21,6 @@
             color: #333;
         }
 
-        /* Standardized Header */
         header {
             background-color: #003366;
             color: white;
@@ -84,7 +82,6 @@
             background-color: #cc3c3c;
         }
 
-        /* Main Content */
         .reason-container {
             display: flex;
             flex-direction: column;
@@ -117,12 +114,12 @@
             margin-bottom: 30px;
         }
 
-        .textarea-group {
+        .form-group {
             text-align: left;
             margin-bottom: 25px;
         }
 
-        .textarea-group label {
+        .form-group label {
             display: block;
             font-size: 14px;
             font-weight: 600;
@@ -130,22 +127,27 @@
             margin-bottom: 8px;
         }
 
-        .textarea-group textarea {
+        .form-group input,
+        .form-group textarea {
             width: 100%;
             padding: 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            resize: vertical;
-            min-height: 150px;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             transition: border-color 0.3s ease;
         }
 
-        .textarea-group textarea:focus {
+        .form-group input:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: #004aad;
             box-shadow: 0 0 5px rgba(0, 68, 173, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
         }
 
         .submit-button {
@@ -165,7 +167,6 @@
             transform: translateY(-2px);
         }
         
-        /* Standardized Footer */
         footer {
             background-color: #121212;
             color: white;
@@ -238,7 +239,6 @@
             color: #aaa;
         }
 
-        /* Responsive design */
         @media (max-width: 768px) {
             .reason-card {
                 padding: 30px;
@@ -271,8 +271,13 @@
             <h2>We're sorry to see you opt out</h2>
             <p class="desc">Please help us understand why you're not participating in the placement process.</p>
 
-            <form action="thanku.html" method="get">
-                <div class="textarea-group">
+            <form id="optout-form">
+                <div class="form-group">
+                    <label for="regno">Registration Number *</label>
+                    <input type="text" id="regno" name="regno" required />
+                </div>
+
+                <div class="form-group">
                     <label for="reason">Your Reason *</label>
                     <textarea id="reason" name="reason" rows="6" required></textarea>
                 </div>
@@ -311,6 +316,31 @@
             © 2025 CHRIST University - Placement Cell. All rights reserved.
         </div>
     </footer>
+
+    <script>
+document.getElementById("optout-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const data = {
+    regno: document.getElementById("regno").value,
+    reason: document.getElementById("reason").value
+  };
+
+  const response = await fetch("http://localhost:4000/not-interested", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  if (response.ok) {
+    // ✅ Redirect to thanku.html
+    window.location.href = "thanku.html";
+  } else {
+    alert("❌ Something went wrong. Please try again.");
+  }
+});
+</script>
+
 
 </body>
 </html>
