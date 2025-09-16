@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* All CSS is now inside this style block for a self-contained file */
         * {
             margin: 0;
             padding: 0;
@@ -506,10 +505,10 @@ document.querySelector("form").addEventListener("submit", async (e) => {
   });
 
   if (response.ok) {
-    // ✅ Redirect instead of alert
+    // Redirect instead of alert
     window.location.href = "success.html";
   } else {
-    alert("❌ Something went wrong. Please try again.");
+    alert("Something went wrong. Please try again.");
   }
 });
 </script>

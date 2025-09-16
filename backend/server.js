@@ -11,19 +11,19 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '------',  // Your MySQL password
-    database: 'Students'   // Your existing DB
+    password: '------',  
+    database: 'Students'   
 });
 
 db.connect(err => {
     if (err) {
-        console.error("❌ Database connection failed:", err);
+        console.error("Database connection failed:", err);
     } else {
-        console.log("✅ Connected to MySQL database");
+        console.log("yayayyyy!!!!!!!Connected to MySQL database");
     }
 });
 
-// 1️⃣ Student login route
+// Student login route
 app.post('/student/login', (req, res) => {
     const { studentId, password } = req.body;
     if (!studentId || !password) {
@@ -42,7 +42,7 @@ app.post('/student/login', (req, res) => {
     });
 });
 
-// 2️⃣ Save interested student
+// Save interested student
 app.post('/interested', (req, res) => {
     const { name, regno, email, contact, course, sem, overall_cgpa } = req.body;
     const sql = `INSERT INTO interested_students (name, regno, email, contact, course, sem, overall_cgpa) VALUES (?,?,?,?,?,?,?)`;
@@ -52,7 +52,7 @@ app.post('/interested', (req, res) => {
     });
 });
 
-// 3️⃣ Save not-interested student
+// Save not-interested student
 app.post('/not-interested', (req, res) => {
     const { regno, reason } = req.body;
     const sql = `INSERT INTO not_interested (regno, reason) VALUES (?,?)`;
@@ -62,7 +62,7 @@ app.post('/not-interested', (req, res) => {
     });
 });
 
-// 4️⃣ Fetch interested students (for admin)
+// Fetch interested students (for admin)
 app.get("/admin/interested", (req, res) => {
     db.query("SELECT * FROM interested_students", (err, results) => {
         if (err) return res.status(500).send(err);
@@ -70,7 +70,7 @@ app.get("/admin/interested", (req, res) => {
     });
 });
 
-// 5️⃣ Fetch not-interested students (for admin)
+// Fetch not-interested students (for admin)
 app.get("/admin/not-interested", (req, res) => {
     db.query("SELECT * FROM not_interested", (err, results) => {
         if (err) return res.status(500).send(err);
@@ -78,7 +78,7 @@ app.get("/admin/not-interested", (req, res) => {
     });
 });
 
-// 6️⃣ Post Notification
+// Post Notification
 app.post('/admin/notifications', (req, res) => {
     const { title, content } = req.body;
     if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
@@ -89,7 +89,7 @@ app.post('/admin/notifications', (req, res) => {
     });
 });
 
-// 7️⃣ Post Announcement
+// Post Announcement
 app.post('/admin/announcements', (req, res) => {
     const { title, content } = req.body;
     if (!title || !content) return res.status(400).json({ error: 'Title and content are required' });
@@ -100,7 +100,7 @@ app.post('/admin/announcements', (req, res) => {
     });
 });
 
-// 8️⃣ Post Drive
+//  Post Drive
 app.post('/admin/drives', (req, res) => {
     const { company, jobTitle, driveDate, lastRegisterDate } = req.body;
     if (!company || !jobTitle || !driveDate || !lastRegisterDate)
@@ -112,7 +112,7 @@ app.post('/admin/drives', (req, res) => {
     });
 });
 
-// 9️⃣ Post Calendar Event
+// Post Calendar Event
 app.post('/admin/calendar', (req, res) => {
     const { eventTitle, eventDate, eventTime } = req.body;
     if (!eventTitle || !eventDate) return res.status(400).json({ error: 'Event title and date are required' });
@@ -161,4 +161,4 @@ app.get('/admin/calendar', (req, res) => {
     });
 });
 
-app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(` Server running on http://localhost:${PORT}`));
