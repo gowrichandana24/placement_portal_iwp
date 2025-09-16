@@ -417,55 +417,29 @@
         </div>
 
         <div class="main-content">
-            <div class="card">
-                <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
-                <div class="card-item">
-                    <h4>Resume Submission</h4>
-                    <p>Submit by <b>12 July 2025</b></p>
-                </div>
-                <div class="card-item">
-                    <h4>Mock Interviews</h4>
-                    <p>Starting from <b>20 July 2025</b></p>
-                </div>
-                <a href="#" class="view-all">View All</a>
-            </div>
+ <div class="card">
+  <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+  <div id="notificationsContent"></div>
+  <a href="#" class="view-all">View All</a>
+</div>
 
-            <div class="card">
-                <h3><i class="fa-solid fa-building"></i> Upcoming Drives</h3>
-                <div class="card-item">
-                    <h4>Infosys</h4>
-                    <p>Date: 15 July 2025 | Register by: 10 July</p>
-                </div>
-                <div class="card-item">
-                    <h4>TCS</h4>
-                    <p>Date: 25 July 2025 | Register by: 20 July</p>
-                </div>
-                <a href="#" class="view-all">View All</a>
-            </div>
+<div class="card">
+  <h3><i class="fa-solid fa-building"></i> Upcoming Drives</h3>
+  <div id="drivesContent"></div>
+  <a href="#" class="view-all">View All</a>
+</div>
 
-            <div class="card">
-                <h3><i class="fa-solid fa-bullhorn"></i> Announcements</h3>
-                <div class="card-item">
-                    <h4>Orientation</h4>
-                    <p>5 July 2025 | Main Auditorium</p>
-                </div>
-                <div class="card-item">
-                    <h4>Soft Skills Training</h4>
-                    <p>1–10 July 2025</p>
-                </div>
-                <a href="#" class="view-all">View All</a>
-            </div>
+<div class="card">
+  <h3><i class="fa-solid fa-bullhorn"></i> Announcements</h3>
+  <div id="announcementsContent"></div>
+  <a href="#" class="view-all">View All</a>
+</div>
 
-            <div class="card">
-                <h3><i class="fa-solid fa-calendar-days"></i> Placement Calendar</h3>
-                <div class="calendar">
-                    <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div><div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
-                    <div></div><div class="highlight">1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div>
-                    <div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div>
-                    <div>14</div><div class="highlight">15</div><div>16</div><div>17</div><div>18</div><div>19</div><div>20</div>
-                    <div>21</div><div>22</div><div>23</div><div>24</div><div class="highlight">25</div><div>26</div><div>27</div>
-                    <div>28</div><div>29</div><div>30</div><div>31</div>
-                </div>
+<div class="card">
+  <h3><i class="fa-solid fa-calendar-days"></i> Placement Calendar</h3>
+  <div id="calendarGrid" class="calendar"></div>
+</div>
+
             </div>
             
             <div class="card">
@@ -521,6 +495,127 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const batchElement = document.querySelector('.sidebar p:nth-of-type(2)');
     if (batchElement) batchElement.textContent = 'Batch: ' + student.batch;
+});
+document.addEventListener('DOMContentLoaded', () => {
+  const student = JSON.parse(localStorage.getItem('student'));
+  if (!student) {
+    alert('Please login first.');
+    window.location.href = 'student-login.html';
+    return;
+  }
+  // Update sidebar info dynamically
+  const nameElement = document.querySelector('.sidebar h2');
+  if (nameElement) nameElement.textContent = student.student_name;
+  const courseElement = document.querySelector('.sidebar p:nth-of-type(1)');
+  if (courseElement) courseElement.textContent = student.course;
+  const batchElement = document.querySelector('.sidebar p:nth-of-type(2)');
+  if (batchElement) batchElement.textContent = 'Batch: ' + student.batch;
+
+  const backendBase = 'http://localhost:5500';
+
+  // Utility to fetch and render lists
+  async function fetchAndRender(url, containerId, renderItem) {
+    const container = document.getElementById(containerId);
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
+      if (data.length === 0) {
+        container.innerHTML = '<p>No data available.</p>';
+        return;
+      }
+      container.innerHTML = '';
+      data.forEach(item => {
+        const el = renderItem(item);
+        container.appendChild(el);
+      });
+    } catch (e) {
+      container.innerHTML = '<p>Error loading data.</p>';
+      console.error(e);
+    }
+  }
+
+  // Render functions for each section
+  function renderNotification(item) {
+    const div = document.createElement('div');
+    div.className = 'card-item';
+    div.innerHTML = `<h4>${item.title}</h4><p>${item.content}</p>`;
+    return div;
+  }
+
+  function renderAnnouncement(item) {
+    const div = document.createElement('div');
+    div.className = 'card-item';
+    div.innerHTML = `<h4>${item.title}</h4><p>${item.content}</p>`;
+    return div;
+  }
+
+  function renderDrive(item) {
+    const div = document.createElement('div');
+    div.className = 'card-item';
+    const driveDate = new Date(item.drive_date).toLocaleDateString();
+    const regDate = new Date(item.last_register_date).toLocaleDateString();
+    div.innerHTML = `<h4>${item.company}</h4><p>Date: ${driveDate} | Register by: ${regDate}</p>`;
+    return div;
+  }
+
+  async function renderCalendar() {
+    const calendarGrid = document.getElementById('calendarGrid');
+    calendarGrid.innerHTML = '';
+
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    dayNames.forEach(day => {
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'day-name';
+      dayDiv.textContent = day;
+      calendarGrid.appendChild(dayDiv);
+    });
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const firstWeekday = firstDay.getDay();
+    const daysInMonth = lastDay.getDate();
+
+    let events = [];
+    try {
+      const res = await fetch(`${backendBase}/admin/calendar`);
+      if (res.ok) {
+        const data = await res.json();
+        events = data.filter(ev => {
+          const evDate = new Date(ev.date);
+          return evDate.getFullYear() === year && evDate.getMonth() === month;
+        });
+      }
+    } catch (e) {
+      console.error('Error fetching calendar events:', e);
+    }
+
+    for (let i = 0; i < firstWeekday; i++) {
+      const emptyDiv = document.createElement('div');
+      calendarGrid.appendChild(emptyDiv);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dayDiv = document.createElement('div');
+      const hasEvent = events.some(ev => {
+        const evDate = new Date(ev.date);
+        return evDate.getDate() === day;
+      });
+      if (hasEvent) dayDiv.classList.add('highlight');
+      dayDiv.textContent = day;
+      calendarGrid.appendChild(dayDiv);
+    }
+  }
+
+  // Call fetch and render functions for each section
+  fetchAndRender(`${backendBase}/admin/notifications`, 'notificationsContent', renderNotification);
+  fetchAndRender(`${backendBase}/admin/announcements`, 'announcementsContent', renderAnnouncement);
+  fetchAndRender(`${backendBase}/admin/drives`, 'drivesContent', renderDrive);
+  renderCalendar();
 });
 </script>
 

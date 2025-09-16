@@ -698,6 +698,78 @@ document.getElementById("viewStudentsLink").addEventListener("click", async (e) 
         console.error(err);
     }
 });
+// Helper function for POST requests
+async function postData(url = '', data = {}) {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Request failed');
+  }
+  return response.json();
+}
+
+// Notification form submit
+document.getElementById('notificationForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  try {
+    const title = document.getElementById('notificationTitle').value.trim();
+    const content = document.getElementById('notificationContent').value.trim();
+    await postData('http://localhost:5500/admin/notifications', { title, content });
+    alert('Notification posted successfully');
+    e.target.reset();
+  } catch (err) {
+    alert('Error posting notification: ' + err.message);
+  }
+});
+
+// Announcement form submit
+document.getElementById('announcementForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  try {
+    const title = document.getElementById('announcementTitle').value.trim();
+    const content = document.getElementById('announcementContent').value.trim();
+    await postData('http://localhost:5500/admin/announcements', { title, content });
+    alert('Announcement posted successfully');
+    e.target.reset();
+  } catch (err) {
+    alert('Error posting announcement: ' + err.message);
+  }
+});
+
+// Drive form submit
+document.getElementById('driveForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  try {
+    const company = document.getElementById('driveCompany').value.trim();
+    const jobTitle = document.getElementById('driveTitle').value.trim();
+    const driveDate = document.getElementById('driveDate').value;
+    const lastRegisterDate = document.getElementById('registerDate').value;
+    await postData('http://localhost:5500/admin/drives', { company, jobTitle, driveDate, lastRegisterDate });
+    alert('Drive posted successfully');
+    e.target.reset();
+  } catch (err) {
+    alert('Error posting drive: ' + err.message);
+  }
+});
+
+// Calendar form submit
+document.getElementById('calendarForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  try {
+    const eventTitle = document.getElementById('eventTitle').value.trim();
+    const eventDate = document.getElementById('eventDate').value;
+    const eventTime = document.getElementById('eventTime').value || null;
+    await postData('http://localhost:5500/admin/calendar', { eventTitle, eventDate, eventTime });
+    alert('Calendar event added successfully');
+    e.target.reset();
+  } catch (err) {
+    alert('Error adding calendar event: ' + err.message);
+  }
+});
 </script>
 
 
