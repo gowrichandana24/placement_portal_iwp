@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AIML & Data Science - Create Support Ticket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* All CSS is now inside this style block for a self-contained file */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #eef4f9 0%, #d8e2ed 100%);
+            color: #333;
+        }
+
+        /* Standardized Header */
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo img {
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .nav-links .logout-btn {
+            background-color: #e04a4a;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-links .logout-btn:hover {
+            background-color: #cc3c3c;
+        }
+
+        /* Main Content */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 180px);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .form-card {
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .form-card h2 {
+            font-size: 28px;
+            color: #003366;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        .form-card input,
+        .form-card textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: border-color 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-card input:focus,
+        .form-card textarea:focus {
+            outline: none;
+            border-color: #004aad;
+            box-shadow: 0 0 5px rgba(0, 68, 173, 0.2);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 14px;
+            background-color: #004aad;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background-color: #003399;
+            transform: translateY(-2px);
+        }
+
+        .success-msg {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+        
+        /* Standardized Footer */
+        footer {
+            background-color: #121212;
+            color: white;
+            padding: 30px 0 10px;
+        }
+
+        .footer-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .footer-col {
+            flex: 1 1 0;
+            min-width: 200px;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 6px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: #00bfff;
+        }
+
+        .footer-col p {
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 6px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 18px;
+            font-size: 16px;
+            align-items: center;
+        }
+
+        .social-icons a {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #00bfff;
+        }
+
+        footer .copyright {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="../images/dep_logo.jpg" alt="Christ University Department Logo" />
+                <strong>AIML & DATA SCIENCE PLACEMENT PORTAL</strong>
+            </a>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="index.html#about">ABOUT</a>
+            <a href="index.html#contact">CONTACT</a>
+            <a href="index.html" class="logout-btn">LOGOUT</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="form-card">
+            <h2>Student Help Desk</h2>
+            <form id="helpForm">
+                <input type="text" name="regno" placeholder="Register Number" required />
+                <input type="text" name="class" placeholder="Class (e.g., B.Tech AIML A)" required />
+                <textarea name="problem" placeholder="Describe your issue or concern" rows="5" required></textarea>
+                <button type="submit" class="submit-button">Submit Problem</button>
+            </form>
+            <div class="success-msg" id="successMsg"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-col">
+                <h4>QUICK LINKS</h4>
+                <a href="index.html">HOME</a>
+                <a href="index.html#about">ABOUT</a>
+                <a href="index.html#contact">CONTACT</a>
+            </div>
+            <div class="footer-col">
+                <h4>CONTACT US</h4>
+                <p>placement@christuni.edu</p>
+                <p>+91 80 4012 9600</p>
+                <p>Kengeri, Bengaluru</p>
+            </div>
+            <div class="footer-col">
+                <h4>FOLLOW US</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 CHRIST University - Placement Cell. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById("helpForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const successMsg = document.getElementById("successMsg");
+            
+            // In a real application, you would send this to a backend via fetch API.
+            // For now, we'll simulate the success message.
+            setTimeout(() => {
+                successMsg.textContent = "Your concern has been submitted successfully!";
+                this.reset();
+            }, 500); // Simulate a network delay
+        });
+    </script>
+</body>
+</html>

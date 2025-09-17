@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AIML & Data Science - Student Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* All CSS is now inside this style block for a self-contained file */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #f3f6fa;
+            color: #333;
+        }
+
+        /* Standardized Header */
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo img {
+            height: 40px;
+            border-radius: 50%;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .nav-links .logout-btn {
+            background-color: #e04a4a; /* A red color for logout */
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .nav-links .logout-btn:hover {
+            background-color: #cc3c3c;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 25px;
+            padding: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 15px;
+            object-fit: cover;
+            border: 3px solid #003366;
+        }
+        
+        .sidebar h2 {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 20px;
+            color: #003366;
+            font-weight: 700;
+        }
+        
+        .sidebar p {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            margin: 5px 0;
+        }
+        
+        .stats-box {
+            background: #eef4f9;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 14px;
+            width: 100%;
+        }
+        
+        .deadline {
+            font-weight: bold;
+            color: #e04a4a;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 15px;
+        }
+        
+        .register-button {
+            display: block;
+            background: #004aad;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+        
+        .register-button:hover {
+            background: #003399;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card h3 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #003366;
+            border-bottom: 2px solid #003366;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .card h3 i {
+            margin-right: 10px;
+            color: #004aad;
+        }
+        
+        .card-item {
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-item:last-child {
+            border-bottom: none;
+        }
+        
+        .card-item h4 {
+            margin: 0 0 5px;
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .card-item p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .view-all {
+            display: inline-block;
+            margin-top: auto; /* Pushes to the bottom of the card */
+            font-size: 14px;
+            color: #004aad;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            align-self: flex-end; /* Aligns to the right */
+        }
+        
+        .view-all:hover {
+            color: #003366;
+            text-decoration: underline;
+        }
+        
+        /* Calendar */
+        .calendar-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            color: #003366;
+            margin-bottom: 10px;
+        }
+        .calendar-heading button {
+            background: none;
+            border: none;
+            color: #003366;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .calendar-heading button:hover {
+            color: #004aad;
+        }
+        
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+            font-size: 13px;
+        }
+        
+        .calendar div {
+            padding: 8px;
+            border-radius: 5px;
+            background: #f5f5f5;
+        }
+        
+        .calendar .day-name {
+            font-weight: 600;
+            color: #003366;
+        }
+        
+        .calendar .highlight {
+            background: #e04a4a;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .support-button {
+            background-color: #004aad;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        
+        .support-button:hover {
+            background-color: #003399;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #121212;
+            color: white;
+            padding: 30px 0 10px;
+        }
+
+        .footer-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .footer-col {
+            flex: 1 1 0;
+            min-width: 200px;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 6px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: #00bfff;
+        }
+
+        .footer-col p {
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 6px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 18px;
+            font-size: 16px;
+            align-items: center;
+        }
+
+        .social-icons a {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #00bfff;
+        }
+
+        footer .copyright {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* Responsive design */
+        @media (max-width: 900px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="../images/dep_logo.jpg" alt="Christ University Department Logo" />
+                <strong>AIML & DATA SCIENCE PLACEMENT PORTAL</strong>
+            </a>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="index.html#about">ABOUT</a>
+            <a href="index.html#contact">CONTACT</a>
+            <a href="index.html" class="logout-btn">LOGOUT</a>
+        </nav>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <img src="../images/admin.PNG" alt="Student Profile" class="profile-pic" />
+            <h2>Shanet Mary Boby</h2>
+            <p>B.Tech Computer Science</p>
+            <p>Batch: 2022–2026</p>
+
+            <div class="stats-box">
+                <p><strong>Eligible for Placement:</strong> Yes</p>
+                <p><strong>Cycle:</strong> July–Nov 2025</p>
+            </div>
+
+            <p class="deadline">Last Day to Apply: 18 July 2025</p>
+
+            <a href="interest-selection.html" class="register-button">Register for Placement</a>
+        </div>
+
+        <div class="main-content">
+ <div class="card">
+  <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+  <div id="notificationsContent"></div>
+  <a href="#" class="view-all">View All</a>
+</div>
+
+<div class="card">
+  <h3><i class="fa-solid fa-building"></i> Upcoming Drives</h3>
+  <div id="drivesContent"></div>
+  <a href="#" class="view-all">View All</a>
+</div>
+
+<div class="card">
+  <h3><i class="fa-solid fa-bullhorn"></i> Announcements</h3>
+  <div id="announcementsContent"></div>
+  <a href="#" class="view-all">View All</a>
+</div>
+
+<div class="card">
+  <h3><i class="fa-solid fa-calendar-days"></i> Placement Calendar</h3>
+  <div id="calendarGrid" class="calendar"></div>
+</div>
+
+            </div>
+            
+            <div class="card">
+                <h3><i class="fa-solid fa-headset"></i> Help & Support</h3>
+                <p>Facing an issue? Create a support ticket and our team will assist you shortly.</p>
+                <a href="create-ticket.html" class="support-button">Create New Ticket</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-col">
+                <h4>QUICK LINKS</h4>
+                <a href="index.html">HOME</a>
+                <a href="index.html#about">ABOUT</a>
+                <a href="index.html#contact">CONTACT</a>
+            </div>
+            <div class="footer-col">
+                <h4>CONTACT US</h4>
+                <p>placement@christuni.edu</p>
+                <p>+91 80 4012 9600</p>
+                <p>Kengeri, Bengaluru</p>
+            </div>
+            <div class="footer-col">
+                <h4>FOLLOW US</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 CHRIST University - Placement Cell. All rights reserved.
+        </div>
+    </footer>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const student = JSON.parse(localStorage.getItem('student'));
+    if (!student) {
+        alert('Please login first.');
+        window.location.href = 'student-login.html';
+        return;
+    }
+
+    // Update dashboard name
+    const nameElement = document.querySelector('.sidebar h2');
+    if (nameElement) nameElement.textContent = student.student_name;
+
+    const courseElement = document.querySelector('.sidebar p:nth-of-type(1)');
+    if (courseElement) courseElement.textContent = student.course;
+
+    const batchElement = document.querySelector('.sidebar p:nth-of-type(2)');
+    if (batchElement) batchElement.textContent = 'Batch: ' + student.batch;
+});
+document.addEventListener('DOMContentLoaded', () => {
+  const student = JSON.parse(localStorage.getItem('student'));
+  if (!student) {
+    alert('Please login first.');
+    window.location.href = 'student-login.html';
+    return;
+  }
+  // Update sidebar info dynamically
+  const nameElement = document.querySelector('.sidebar h2');
+  if (nameElement) nameElement.textContent = student.student_name;
+  const courseElement = document.querySelector('.sidebar p:nth-of-type(1)');
+  if (courseElement) courseElement.textContent = student.course;
+  const batchElement = document.querySelector('.sidebar p:nth-of-type(2)');
+  if (batchElement) batchElement.textContent = 'Batch: ' + student.batch;
+
+  const backendBase = 'http://localhost:5500';
+
+  // Utility to fetch and render lists
+  async function fetchAndRender(url, containerId, renderItem) {
+    const container = document.getElementById(containerId);
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
+      if (data.length === 0) {
+        container.innerHTML = '<p>No data available.</p>';
+        return;
+      }
+      container.innerHTML = '';
+      data.forEach(item => {
+        const el = renderItem(item);
+        container.appendChild(el);
+      });
+    } catch (e) {
+      container.innerHTML = '<p>Error loading data.</p>';
+      console.error(e);
+    }
+  }
+
+  // Render functions for each section
+  function renderNotification(item) {
+    const div = document.createElement('div');
+    div.className = 'card-item';
+    div.innerHTML = `<h4>${item.title}</h4><p>${item.content}</p>`;
+    return div;
+  }
+
+  function renderAnnouncement(item) {
+    const div = document.createElement('div');
+    div.className = 'card-item';
+    div.innerHTML = `<h4>${item.title}</h4><p>${item.content}</p>`;
+    return div;
+  }
+
+  function renderDrive(item) {
+    const div = document.createElement('div');
+    div.className = 'card-item';
+    const driveDate = new Date(item.drive_date).toLocaleDateString();
+    const regDate = new Date(item.last_register_date).toLocaleDateString();
+    div.innerHTML = `<h4>${item.company}</h4><p>Date: ${driveDate} | Register by: ${regDate}</p>`;
+    return div;
+  }
+
+  async function renderCalendar() {
+    const calendarGrid = document.getElementById('calendarGrid');
+    calendarGrid.innerHTML = '';
+
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    dayNames.forEach(day => {
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'day-name';
+      dayDiv.textContent = day;
+      calendarGrid.appendChild(dayDiv);
+    });
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const firstWeekday = firstDay.getDay();
+    const daysInMonth = lastDay.getDate();
+
+    let events = [];
+    try {
+      const res = await fetch(`${backendBase}/admin/calendar`);
+      if (res.ok) {
+        const data = await res.json();
+        events = data.filter(ev => {
+          const evDate = new Date(ev.date);
+          return evDate.getFullYear() === year && evDate.getMonth() === month;
+        });
+      }
+    } catch (e) {
+      console.error('Error fetching calendar events:', e);
+    }
+
+    for (let i = 0; i < firstWeekday; i++) {
+      const emptyDiv = document.createElement('div');
+      calendarGrid.appendChild(emptyDiv);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dayDiv = document.createElement('div');
+      const hasEvent = events.some(ev => {
+        const evDate = new Date(ev.date);
+        return evDate.getDate() === day;
+      });
+      if (hasEvent) dayDiv.classList.add('highlight');
+      dayDiv.textContent = day;
+      calendarGrid.appendChild(dayDiv);
+    }
+  }
+
+  // Call fetch and render functions for each section
+  fetchAndRender(`${backendBase}/admin/notifications`, 'notificationsContent', renderNotification);
+  fetchAndRender(`${backendBase}/admin/announcements`, 'announcementsContent', renderAnnouncement);
+  fetchAndRender(`${backendBase}/admin/drives`, 'drivesContent', renderDrive);
+  renderCalendar();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AIML & Data Science - Manage Students</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global Styles & Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f3f6fa;
+            color: #333;
+        }
+
+        /* Standardized Header */
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo img {
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .nav-links .logout-btn {
+            background-color: #e04a4a;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-links .logout-btn:hover {
+            background-color: #cc3c3c;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: calc(100vh - 180px);
+        }
+        
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .content-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: #003366;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            width: 100%;
+        }
+
+        .profile-icon {
+            font-size: 60px;
+            color: #003366;
+        }
+
+        .admin-label {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .sidebar-nav {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-nav li {
+            margin: 10px 0;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #555;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .sidebar-nav a:hover {
+            background-color: #eef4f9;
+            color: #003366;
+        }
+        
+        .sidebar-nav .active a {
+            background-color: #003366;
+            color: white;
+        }
+
+        .sidebar-nav a i {
+            margin-right: 10px;
+        }
+        
+        /* Student Management Section */
+        .dashboard-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .dashboard-section h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #003366;
+        }
+
+        .student-management-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-filter-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .search-filter-group input,
+        .search-filter-group select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .search-filter-group input:focus,
+        .search-filter-group select:focus {
+            outline: none;
+            border-color: #004aad;
+            box-shadow: 0 0 5px rgba(0, 68, 173, 0.2);
+        }
+        
+        .message-button {
+            background-color: #004aad;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .message-button:hover {
+            background-color: #003399;
+        }
+        
+        /* Student Table */
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .student-table th, .student-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .student-table th {
+            background-color: #f9f9f9;
+            font-weight: 600;
+            color: #003366;
+        }
+        
+        .student-table tr:hover {
+            background-color: #f0f4f7;
+        }
+        
+        /* Messaging Form */
+        .messaging-form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin-top: 20px;
+            display: none; /* Initially hidden */
+        }
+        
+        .messaging-form h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #003366;
+        }
+        
+        .messaging-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            min-height: 120px;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        .messaging-form .send-btn, .messaging-form .cancel-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .messaging-form .send-btn {
+            background-color: #004aad;
+        }
+        
+        .messaging-form .send-btn:hover {
+            background-color: #003399;
+        }
+        
+        .messaging-form .cancel-btn {
+            background-color: #e04a4a;
+            margin-left: 10px;
+        }
+        
+        .messaging-form .cancel-btn:hover {
+            background-color: #cc3c3c;
+        }
+        
+        /* Standardized Footer */
+        footer {
+            background-color: #121212;
+            color: white;
+            padding: 30px 0 10px;
+        }
+
+        .footer-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .footer-col {
+            flex: 1 1 0;
+            min-width: 200px;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 6px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: #00bfff;
+        }
+
+        .footer-col p {
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 6px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 18px;
+            font-size: 16px;
+            align-items: center;
+        }
+
+        .social-icons a {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #00bfff;
+        }
+
+        footer .copyright {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="../images/dep_logo.jpg" alt="Christ University Department Logo" />
+                <strong>AIML & DATA SCIENCE PLACEMENT PORTAL</strong>
+            </a>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="index.html#about">ABOUT</a>
+            <a href="index.html#contact">CONTACT</a>
+            <a href="index.html" class="logout-btn">LOGOUT</a>
+        </nav>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-user-circle profile-icon"></i>
+                <div class="admin-label">Admin</div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item"><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li class="nav-item active"><a href="manage-students.html"><i class="fas fa-users"></i> Manage Students</a></li>
+                    <li class="nav-item"><a href="manage-companies.html"><i class="fas fa-building"></i> Manage Companies</a></li>
+                    <li class="nav-item"><a href="manage-jobs.html"><i class="fas fa-briefcase"></i> Manage Jobs</a></li>
+                    <li class="nav-item"><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="content-header">
+                <h2>Manage Students</h2>
+            </div>
+
+            <div class="dashboard-section">
+                <div class="student-management-controls">
+                    <div class="search-filter-group">
+                        <input type="text" id="studentSearch" placeholder="Search by name or ID...">
+                        <select id="studentFilter">
+                            <option value="all">Filter by...</option>
+                            <option value="placed">Placed</option>
+                            <option value="unplaced">Unplaced</option>
+                            <option value="eligible">Eligible</option>
+                        </select>
+                    </div>
+                    <button class="message-button"><i class="fas fa-envelope"></i> Message Selected</button>
+                </div>
+                
+                <table class="student-table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>CGPA</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" name="student"></td>
+                            <td>CSB001</td>
+                            <td>John Doe</td>
+                            <td>8.5</td>
+                            <td><span style="color: green; font-weight: bold;">Placed</span></td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" name="student"></td>
+                            <td>CSB002</td>
+                            <td>Jane Smith</td>
+                            <td>7.2</td>
+                            <td><span style="color: red; font-weight: bold;">Unplaced</span></td>
+                        </tr>
+                         <tr>
+                            <td><input type="checkbox" name="student"></td>
+                            <td>CSB003</td>
+                            <td>Emily White</td>
+                            <td>9.1</td>
+                            <td><span style="color: green; font-weight: bold;">Placed</span></td>
+                        </tr>
+                         <tr>
+                            <td><input type="checkbox" name="student"></td>
+                            <td>CSB004</td>
+                            <td>David Chen</td>
+                            <td>7.8</td>
+                            <td><span style="color: red; font-weight: bold;">Unplaced</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="messaging-form" style="display: none;">
+                    <h4>Send Message</h4>
+                    <textarea id="messageContent" placeholder="Type your message here..." required></textarea>
+                    <button class="send-btn">Send</button>
+                    <button class="cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-col">
+                <h4>QUICK LINKS</h4>
+                <a href="index.html">HOME</a>
+                <a href="index.html#about">ABOUT</a>
+                <a href="index.html#contact">CONTACT</a>
+            </div>
+            <div class="footer-col">
+                <h4>CONTACT US</h4>
+                <p>placement@christuni.edu</p>
+                <p>+91 80 4012 9600</p>
+                <p>Kengeri, Bengaluru</p>
+            </div>
+            <div class="footer-col">
+                <h4>FOLLOW US</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 CHRIST University - Placement Cell. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const studentTable = document.querySelector('.student-table tbody');
+            const studentSearch = document.getElementById('studentSearch');
+            const studentFilter = document.getElementById('studentFilter');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const messageButton = document.querySelector('.message-button');
+            const messagingForm = document.querySelector('.messaging-form');
+            const messageContent = document.getElementById('messageContent');
+            const sendBtn = document.querySelector('.send-btn');
+            const cancelBtn = document.querySelector('.cancel-btn');
+
+            const students = Array.from(studentTable.querySelectorAll('tr'));
+
+            function filterAndSearch() {
+                const searchTerm = studentSearch.value.toLowerCase();
+                const filterValue = studentFilter.value;
+
+                students.forEach(row => {
+                    const id = row.cells[1].textContent.toLowerCase();
+                    const name = row.cells[2].textContent.toLowerCase();
+                    const status = row.cells[4].textContent.trim().toLowerCase();
+
+                    const matchesSearch = name.includes(searchTerm) || id.includes(searchTerm);
+                    const matchesFilter = filterValue === 'all' || status === filterValue;
+
+                    if (matchesSearch && matchesFilter) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            studentSearch.addEventListener('input', filterAndSearch);
+            studentFilter.addEventListener('change', filterAndSearch);
+
+            selectAllCheckbox.addEventListener('change', (e) => {
+                const checkboxes = studentTable.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.closest('tr').style.display !== 'none') {
+                        checkbox.checked = e.target.checked;
+                    }
+                });
+            });
+
+            messageButton.addEventListener('click', () => {
+                const selectedStudents = studentTable.querySelectorAll('input[type="checkbox"]:checked');
+                if (selectedStudents.length > 0) {
+                    messagingForm.style.display = 'block';
+                } else {
+                    alert('No students selected to message.');
+                }
+            });
+            
+            sendBtn.addEventListener('click', () => {
+                const selectedStudents = Array.from(studentTable.querySelectorAll('input[type="checkbox"]:checked'))
+                    .map(checkbox => checkbox.closest('tr').cells[2].textContent);
+                
+                const message = messageContent.value.trim();
+                
+                if (message) {
+                    alert(`Message sent to ${selectedStudents.join(', ')}: \n\n"${message}"`);
+                    messagingForm.style.display = 'none';
+                    messageContent.value = '';
+                } else {
+                    alert('Please type a message before sending.');
+                }
+            });
+
+            cancelBtn.addEventListener('click', () => {
+                messagingForm.style.display = 'none';
+                messageContent.value = '';
+            });
+        });
+    </script>
+</body>
+</html>

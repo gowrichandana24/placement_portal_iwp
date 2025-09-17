@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AIML & Data Science - Student Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f3f6fa;
+            color: #333;
+        }
+
+        /* Standardized Header */
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo img {
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .nav-links .logout-btn {
+            background-color: #e04a4a;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-links .logout-btn:hover {
+            background-color: #cc3c3c;
+        }
+
+        /* Form Container */
+        .form-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 50px;
+        }
+
+        /* Form Fieldsets */
+        fieldset {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        legend {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #003366;
+            padding: 0 15px;
+            background: white;
+        }
+
+        /* Two-column grid layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 0; 
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #555;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #f9f9f9;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #004aad;
+            box-shadow: 0 0 8px rgba(0, 68, 173, 0.2);
+            outline: none;
+            background: white;
+        }
+
+        /* Full-width groups */
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        /* Submit Button */
+        .submit-btn {
+            background: #004aad;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 17px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+        
+        .submit-btn:hover {
+            background: #003399;
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Standardized Footer */
+        footer {
+            background-color: #121212;
+            color: white;
+            padding: 30px 0 10px;
+        }
+
+        .footer-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .footer-col {
+            flex: 1 1 0;
+            min-width: 200px;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 6px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: #00bfff;
+        }
+
+        .footer-col p {
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 6px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 18px;
+            font-size: 16px;
+            align-items: center;
+        }
+
+        .social-icons a {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #00bfff;
+        }
+
+        footer .copyright {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-container {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="../images/dep_logo.jpg" alt="Christ University Department Logo" />
+                <strong>AIML & DATA SCIENCE PLACEMENT PORTAL</strong>
+            </a>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="index.html#about">ABOUT</a>
+            <a href="index.html#contact">CONTACT</a>
+            <a href="index.html" class="logout-btn">LOGOUT</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="form-container">
+            <form action="success.html" method="get">
+                <fieldset>
+                    <legend>Student Details</legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" required pattern="[A-Za-z\s]+" title="Only alphabets and spaces are allowed." />
+                        </div>
+                        <div class="form-group">
+                            <label for="regno">Register No:</label>
+                            <input type="number" id="regno" name="regno" required min="1" step="1" title="Only numbers are allowed" />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="contact">Contact:</label>
+                            <input type="tel" id="contact" name="contact" pattern="[0-9]{10}" maxlength="10" title="Enter exactly 10 digits" required />
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Academic Details</legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="board10">10th Board:</label>
+                            <select id="board10" name="board10" required>
+                                <option value="">-- Select Board --</option>
+                                <option value="cbse">CBSE</option>
+                                <option value="ICSE">ICSE</option>
+                                <option value="state">STATE</option>
+                                <option value="other">OTHER</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="percentage10">10th Percentage:</label>
+                            <input type="number" id="percentage10" name="percentage10" step="0.01" min="0" max="100" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="cgpa10">10th CGPA (/10):</label>
+                            <input type="number" id="cgpa10" name="cgpa10" step="0.01" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="board12">12th Board:</label>
+                            <select id="board12" name="board12" required>
+                                <option value="">-- Select Board --</option>
+                                <option value="cbse">CBSE</option>
+                                <option value="ICSE">ICSE</option>
+                                <option value="state">STATE</option>
+                                <option value="other">OTHER</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="percentage12">12th Percentage:</label>
+                            <input type="number" id="percentage12" name="percentage12" step="0.01" min="0" max="100" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="cgpa12">12th CGPA (/10):</label>
+                            <input type="number" id="cgpa12" name="cgpa12" step="0.01" readonly />
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>B.Tech Semester Details</legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="dept">Department:</label>
+                            <input type="text" id="dept" name="dept" value="AIML & DS" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="course">Course:</label>
+                            <select id="course" name="course" required>
+                                <option value="AIML" selected>AIML</option>
+                                <option value="CSE_AIML">CSE AIML</option>
+                                <option value="CSE_DS">CSE DS</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="sem">Current Semester:</label>
+                            <select id="sem" name="sem" required>
+                                <option value="">-- Select Semester --</option>
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                                <option value="3">Semester 3</option>
+                                <option value="4">Semester 4</option>
+                                <option value="5">Semester 5</option>
+                                <option value="6">Semester 6</option>
+                                <option value="7">Semester 7</option>
+                                <option value="8">Semester 8</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="cgpa-section" style="display: none;">
+                        <h3 style="margin-top: 30px; font-size: 18px; color: #003366;">Semester GPA (/4)</h3>
+                        <div class="form-grid" id="sem-cgpa-grid"></div>
+                        <div class="form-group full-width" id="overall-cgpa-group" style="margin-top: 20px; display: none;">
+                            <label for="overallcgpa">Overall CGPA (/10):</label>
+                            <input type="number" id="overallcgpa" name="overallcgpa" step="0.01" readonly />
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="full-width" style="margin-top: 20px;">
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-col">
+                <h4>QUICK LINKS</h4>
+                <a href="index.html">HOME</a>
+                <a href="index.html#about">ABOUT</a>
+                <a href="index.html#contact">CONTACT</a>
+            </div>
+            <div class="footer-col">
+                <h4>CONTACT US</h4>
+                <p>placement@christuni.edu</p>
+                <p>+91 80 4012 9600</p>
+                <p>Kengeri, Bengaluru</p>
+            </div>
+            <div class="footer-col">
+                <h4>FOLLOW US</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 CHRIST University - Placement Cell. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        function percentToCgpa10(percent) {
+            if (isNaN(percent) || percent < 0 || percent > 100) return '';
+            const cgpa = (percent / 9.5).toFixed(2);
+            return Math.min(parseFloat(cgpa), 10.00);
+        }
+
+        document.getElementById('percentage10').addEventListener('input', e => {
+            document.getElementById('cgpa10').value = percentToCgpa10(parseFloat(e.target.value));
+        });
+
+        document.getElementById('percentage12').addEventListener('input', e => {
+            document.getElementById('cgpa12').value = percentToCgpa10(parseFloat(e.target.value));
+        });
+
+        function calculateOverallCGPA() {
+            let totalGpa4 = 0, count = 0;
+            const currentSem = parseInt(document.getElementById('sem').value);
+            const overallCGPAInput = document.getElementById('overallcgpa');
+            const overallCGPAGroup = document.getElementById('overall-cgpa-group');
+
+            for (let i = 1; i <= currentSem; i++) {
+                const input = document.getElementById(`sem${i}gpa`);
+                if (input) {
+                    const val = parseFloat(input.value);
+                    if (!isNaN(val)) {
+                        totalGpa4 += val;
+                        count++;
+                    }
+                }
+            }
+            if (count > 0) {
+                const averageGpa4 = totalGpa4 / count;
+                overallCGPAInput.value = (averageGpa4 * 2.5).toFixed(2);
+                overallCGPAGroup.style.display = 'block';
+            } else {
+                overallCGPAInput.value = '';
+                overallCGPAGroup.style.display = 'none';
+            }
+        }
+
+        const semSelect = document.getElementById('sem');
+        const cgpaSection = document.getElementById('cgpa-section');
+        const semCgpaGrid = document.getElementById('sem-cgpa-grid');
+
+        semSelect.addEventListener('change', () => {
+            const currentSem = parseInt(semSelect.value);
+            semCgpaGrid.innerHTML = '';
+            if (currentSem > 0) {
+                cgpaSection.style.display = 'block';
+                for (let i = 1; i <= currentSem; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'form-group';
+                    div.innerHTML = `<label for="sem${i}gpa">Sem ${i}:</label><input type="number" id="sem${i}gpa" name="sem${i}gpa" step="0.01" min="0" max="4">`;
+                    semCgpaGrid.appendChild(div);
+                    document.getElementById(`sem${i}gpa`).addEventListener('input', calculateOverallCGPA);
+                }
+                calculateOverallCGPA();
+            } else {
+                cgpaSection.style.display = 'none';
+                document.getElementById('overall-cgpa-group').style.display = 'none';
+            }
+        });
+
+        semSelect.dispatchEvent(new Event('change'));
+    </script>
+    <script>
+document.querySelector("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const data = {
+    name: document.getElementById("name").value,
+    regno: document.getElementById("regno").value,
+    email: document.getElementById("email").value,
+    contact: document.getElementById("contact").value,
+    course: document.getElementById("course").value,
+    sem: document.getElementById("sem").value,
+    overall_cgpa: document.getElementById("overallcgpa").value
+  };
+
+  const response = await fetch("http://localhost:5500/interested", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  if (response.ok) {
+    // Redirect instead of alert
+    window.location.href = "success.html";
+  } else {
+    alert("Something went wrong. Please try again.");
+  }
+});
+</script>
+
+
+</body>
+</html>

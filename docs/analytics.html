@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AIML & Data Science - Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* Global Styles & Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f3f6fa;
+            color: #333;
+        }
+
+        /* Standardized Header */
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo img {
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .nav-links .logout-btn {
+            background-color: #e04a4a;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-links .logout-btn:hover {
+            background-color: #cc3c3c;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: calc(100vh - 180px);
+        }
+        
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .content-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: #003366;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            width: 100%;
+        }
+
+        .profile-icon {
+            font-size: 60px;
+            color: #003366;
+        }
+
+        .admin-label {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .sidebar-nav {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-nav li {
+            margin: 10px 0;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #555;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .sidebar-nav a:hover {
+            background-color: #eef4f9;
+            color: #003366;
+        }
+        
+        .sidebar-nav .active a {
+            background-color: #003366;
+            color: white;
+        }
+
+        .sidebar-nav a i {
+            margin-right: 10px;
+        }
+        
+        /* Analytics Section */
+        .dashboard-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .dashboard-section h3 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #003366;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .chart-container {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        /* Standardized Footer */
+        footer {
+            background-color: #121212;
+            color: white;
+            padding: 30px 0 10px;
+        }
+
+        .footer-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+
+        .footer-col {
+            flex: 1 1 0;
+            min-width: 200px;
+        }
+
+        .footer-col h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 6px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: #00bfff;
+        }
+
+        .footer-col p {
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 6px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 18px;
+            font-size: 16px;
+            align-items: center;
+        }
+
+        .social-icons a {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #00bfff;
+        }
+
+        footer .copyright {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 12px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="../images/dep_logo.jpg" alt="Christ University Department Logo" />
+                <strong>AIML & DATA SCIENCE PLACEMENT PORTAL</strong>
+            </a>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">HOME</a>
+            <a href="index.html#about">ABOUT</a>
+            <a href="index.html#contact">CONTACT</a>
+            <a href="index.html" class="logout-btn">LOGOUT</a>
+        </nav>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-user-circle profile-icon"></i>
+                <div class="admin-label">Admin</div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item"><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="manage-students.html"><i class="fas fa-users"></i> Manage Students</a></li>
+                    <li class="nav-item"><a href="manage-companies.html"><i class="fas fa-building"></i> Manage Companies</a></li>
+                    <li class="nav-item"><a href="manage-jobs.html"><i class="fas fa-briefcase"></i> Manage Jobs</a></li>
+                    <li class="nav-item active"><a href="analytics.html"><i class="fas fa-chart-line"></i> Analytics</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="content-header">
+                <h2>Analytics</h2>
+            </div>
+            
+            <div class="dashboard-section">
+                <h3>Placement Overview</h3>
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <canvas id="placementRateChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="companyCountChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-section">
+                <h3>Department Metrics</h3>
+                <div class="analytics-grid">
+                    <div class="chart-container">
+                        <canvas id="ctcChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-wrapper">
+            <div class="footer-col">
+                <h4>QUICK LINKS</h4>
+                <a href="index.html">HOME</a>
+                <a href="index.html#about">ABOUT</a>
+                <a href="index.html#contact">CONTACT</a>
+            </div>
+            <div class="footer-col">
+                <h4>CONTACT US</h4>
+                <p>placement@christuni.edu</p>
+                <p>+91 80 4012 9600</p>
+                <p>Kengeri, Bengaluru</p>
+            </div>
+            <div class="footer-col">
+                <h4>FOLLOW US</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 CHRIST University - Placement Cell. All rights reserved.
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample Data (replace with data fetched from your backend)
+            const placementData = {
+                labels: ['Placed', 'Unplaced'],
+                datasets: [{
+                    label: 'Students',
+                    data: [85, 65], // Replace with dynamic data
+                    backgroundColor: ['#4CAF50', '#F44336'],
+                }]
+            };
+
+            const companyData = {
+                labels: ['Active', 'Upcoming', 'Inactive'],
+                datasets: [{
+                    label: 'Companies',
+                    data: [35, 10, 5], // Replace with dynamic data
+                    backgroundColor: ['#003366', '#FFC107', '#9E9E9E'],
+                }]
+            };
+
+            const ctcData = {
+                labels: ['2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Average CTC (LPA)',
+                    data: [5.5, 6.0, 6.5], // Replace with dynamic data
+                    backgroundColor: '#004aad',
+                    borderColor: '#003366',
+                    borderWidth: 1
+                }]
+            };
+
+            // Chart Configuration
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Sample Chart Title' }
+                }
+            };
+            
+            // Render Charts
+            new Chart(document.getElementById('placementRateChart'), {
+                type: 'doughnut',
+                data: placementData,
+                options: { ...chartOptions, plugins: { ...chartOptions.plugins, title: { text: 'Placement Rate' } } }
+            });
+
+            new Chart(document.getElementById('companyCountChart'), {
+                type: 'pie',
+                data: companyData,
+                options: { ...chartOptions, plugins: { ...chartOptions.plugins, title: { text: 'Company Status' } } }
+            });
+
+            new Chart(document.getElementById('ctcChart'), {
+                type: 'bar',
+                data: ctcData,
+                options: { ...chartOptions, plugins: { ...chartOptions.plugins, title: { text: 'Average CTC Over Years' } } }
+            });
+        });
+    </script>
+</body>
+</html>
